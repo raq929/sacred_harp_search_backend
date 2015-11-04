@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: calls
+#
+#  id         :integer          not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  song_id    :integer
+#  caller_id  :integer
+#  singing_id :integer
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 # This model initially had no columns defined.  If you add columns to the
