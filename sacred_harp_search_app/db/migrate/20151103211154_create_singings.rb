@@ -10,5 +10,5 @@ class CreateSingings < ActiveRecord::Migration
       t.timestamps null: false
     end
   end
-  add_index :singings, [:name, :city, :start_date], unique: true
+  add_index :singings, [:name, :start_date], unique: true
 end
