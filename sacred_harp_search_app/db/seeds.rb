@@ -33,9 +33,9 @@ b = Caller.create!(name: "Ben Sachs-Hamilton")
 puts "creates 3 callers"
 
 #creates singings
-osc = Singing.create!(name: 'Ohio State Convention', city: 'Dayton', state:'Ohio', date:'2005-02-27')
-pvs = Singing.create!(name: 'Pioneer Valley Singing', city: 'Northampton', state:'MA', date:'2011-05-23')
-wm = Singing.create!(name: 'Western Mass Convention', city: 'Amherst', state:'MA', date:'2013-08-13')
+osc = Singing.create!(name: 'Ohio State Convention', city: 'Dayton', state:'Ohio', start_date:'2005-02-27')
+pvs = Singing.create!(name: 'Pioneer Valley Singing', city: 'Northampton', state:'MA', start_date:'2011-05-23')
+wm = Singing.create!(name: 'Western Mass Convention', city: 'Amherst', state:'MA', start_date:'2013-08-13')
 puts "creates 3 singings"
 
 c1 = Call.create!(song_id: hall.id, caller_id: r.id, singing_id: osc.id)
