@@ -25,7 +25,13 @@ Rails.application.routes.draw do
   #       get 'sold'
   #     end
   #   end
+    resources :callers do
+      resources :calls
+      resources :songs
+      resources :singings
+    end
 
+    resources :singings
   # Example resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales
