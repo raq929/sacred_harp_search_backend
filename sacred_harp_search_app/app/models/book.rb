@@ -10,4 +10,6 @@
 
 class Book < ActiveRecord::Base
   has_many :songs
+
+  validates :name, presence: true, unique: true
 end
