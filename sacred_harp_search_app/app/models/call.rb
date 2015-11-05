@@ -14,4 +14,8 @@ class Call < ActiveRecord::Base
   belongs_to :caller
   belongs_to :song
   belongs_to :singing
+
+  validates :song, uniqueness: {scope: :singing}
+  validates :song, presence: true
+  validates :singing, presence: true
 end
