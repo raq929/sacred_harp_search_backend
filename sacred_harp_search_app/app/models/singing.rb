@@ -15,4 +15,11 @@ class Singing < ActiveRecord::Base
   has_many :calls
   has_many :songs, through: :calls
   has_many :callers, through: :calls
+
+  validates :name, presence: true
+  validates :city, presence: true
+  validates :state, presence: true
+  validates :start_date, presence: true
+  validates :end_date, presence: true
+  validates :name, uniqueness: {scope: :start_date}
 end
