@@ -1,4 +1,4 @@
-class CallersController < ApplicationController
+class CallersController < OpenReadController
   def index
     render json: Caller.all
   end
