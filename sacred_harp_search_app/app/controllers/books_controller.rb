@@ -48,7 +48,7 @@ class BooksController < OpenReadController
   end
 
   def book_params
-    params.require(:book).permit(:title, :isbn)
+    params.require(:book).permit(:name)
   end
 
   private :set_book, :book_params
