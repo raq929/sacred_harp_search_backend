@@ -41,7 +41,7 @@ class CallsController < OpenReadController
       render json: {song: song, singing: singing, caller: caller}
   end
 
-  def update
+  def create
     new_call = Call.create(call_params)
     if new_call.save
       render json: new_call, status: :created
@@ -50,7 +50,7 @@ class CallsController < OpenReadController
     end
   end
 
-  def create
+  def update
   end
 
   def destroy
