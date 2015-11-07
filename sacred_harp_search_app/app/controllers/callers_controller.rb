@@ -1,8 +1,13 @@
 class CallersController < OpenReadController
   def index
-    render json: Caller.all
+    if params[:name]
+      render json: Caller.find(name: params[:name])
+    else
+      render json: Caller.all
+    end
   end
+
   def show
-    render json: Caller.find(params[:id]).songs
+    render json: Caller.find(params[:id])
   end
 end
