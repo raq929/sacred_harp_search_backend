@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151103212113) do
+ActiveRecord::Schema.define(version: 20151107220313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,12 +52,31 @@ ActiveRecord::Schema.define(version: 20151103212113) do
   create_table "songs", force: :cascade do |t|
     t.string   "number"
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
     t.integer  "book_id"
+    t.string   "meter_name"
+    t.string   "meter_count"
+    t.text     "song_text"
+    t.string   "composer_first_name"
+    t.string   "composer_last_name"
+    t.string   "composition_date"
+    t.string   "poet_first_name"
+    t.string   "post_last_name"
   end
 
   add_index "songs", ["book_id"], name: "index_songs_on_book_id", using: :btree
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",           null: false
+    t.string   "token",           null: false
+    t.string   "password_digest", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["token"], name: "index_users_on_token", unique: true, using: :btree
 
   add_foreign_key "calls", "callers"
   add_foreign_key "calls", "singings"
