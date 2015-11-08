@@ -8,5 +8,4 @@ class CreateSingings < ActiveRecord::Migration
       t.timestamps null: false
     end
   end
-  add_index :singings, [:name, :date], unique: true
 end

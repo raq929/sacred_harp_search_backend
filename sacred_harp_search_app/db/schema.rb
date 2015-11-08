@@ -11,19 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151107220313) do
+ActiveRecord::Schema.define(version: 20151108171957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "books", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "callers", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -38,20 +38,22 @@ ActiveRecord::Schema.define(version: 20151107220313) do
 
   add_index "calls", ["caller_id"], name: "index_calls_on_caller_id", using: :btree
   add_index "calls", ["singing_id"], name: "index_calls_on_singing_id", using: :btree
+  add_index "calls", ["song_id", "singing_id"], name: "index_calls_on_song_id_and_singing_id", unique: true, using: :btree
   add_index "calls", ["song_id"], name: "index_calls_on_song_id", using: :btree
 
   create_table "singings", force: :cascade do |t|
-    t.string   "name"
-    t.string   "city"
-    t.string   "state"
-    t.date     "date"
+    t.string   "name",       null: false
+    t.string   "location",   null: false
+    t.string   "date",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  add_index "singings", ["name", "date"], name: "index_singings_on_name_and_date", unique: true, using: :btree
+
   create_table "songs", force: :cascade do |t|
-    t.string   "number"
-    t.string   "name"
+    t.string   "number",              null: false
+    t.string   "name",                null: false
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "book_id"
@@ -66,17 +68,7 @@ ActiveRecord::Schema.define(version: 20151107220313) do
   end
 
   add_index "songs", ["book_id"], name: "index_songs_on_book_id", using: :btree
-
-  create_table "users", force: :cascade do |t|
-    t.string   "email",           null: false
-    t.string   "token",           null: false
-    t.string   "password_digest", null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-  end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["token"], name: "index_users_on_token", unique: true, using: :btree
+  add_index "songs", ["name", "book_id"], name: "index_songs_on_name_and_book_id", unique: true, using: :btree
 
   add_foreign_key "calls", "callers"
   add_foreign_key "calls", "singings"

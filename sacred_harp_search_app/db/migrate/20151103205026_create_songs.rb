@@ -6,6 +6,5 @@ class CreateSongs < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_index :songs, [:name, :book_id], unique: true
   end
 end
