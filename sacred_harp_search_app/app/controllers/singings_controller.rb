@@ -1,6 +1,10 @@
 class SingingsController < OpenReadController
   def index
+    if params[:name]
+      render json: Singing.find_by(name: params[:name])
+    else
     render json: Singing.all
+    end
   end
 
   def show

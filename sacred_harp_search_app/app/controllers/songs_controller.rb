@@ -1,6 +1,10 @@
 class SongsController < OpenReadController
   def index
-    render json: Song.all
+    if params[:number]
+      render json: Song.find_by(number: params[:number])
+    else
+      render json: Song.all
+    end
   end
 
   def show

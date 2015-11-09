@@ -23,7 +23,7 @@ class CallsController < OpenReadController
         result.push(callInfo(call))
       end
     elsif params[:song_id]
-      singing_id = params[:song_id]
+      song_id = params[:song_id]
       Call.where(song_id: song_id).find_each do |call|
         result.push(callInfo(call))
       end
