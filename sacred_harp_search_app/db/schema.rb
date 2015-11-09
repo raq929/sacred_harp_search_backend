@@ -69,19 +69,20 @@ ActiveRecord::Schema.define(version: 20151108171957) do
 
   add_index "songs", ["book_id"], name: "index_songs_on_book_id", using: :btree
   add_index "songs", ["name", "book_id"], name: "index_songs_on_name_and_book_id", unique: true, using: :btree
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",           null: false
+    t.string   "token",           null: false
+    t.string   "password_digest", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["token"], name: "index_users_on_token", unique: true, using: :btree
+
   add_foreign_key "calls", "callers"
   add_foreign_key "calls", "singings"
   add_foreign_key "calls", "songs"
   add_foreign_key "songs", "books"
-
-
-create_table "users", force: :cascade do |t|
-  t.string   "email",           null: false
-  t.string   "token",           null: false
-  t.string   "password_digest", null: false
-  t.datetime "created_at",      null: false
-  t.datetime "updated_at",      null: false
 end
-
-add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-add_index "users", ["token"], name: "index_users_on_token", unique: true, using: :btree

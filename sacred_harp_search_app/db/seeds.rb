@@ -5,20 +5,22 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-Song.delete_all
-Book.delete_all
-Call.delete_all
-Caller.delete_all
-Singing.delete_all
+
+Call.destroy_all
+Song.destroy_all
+Book.destroy_all
+
+Caller.destroy_all
+Singing.destroy_all
 
 #Create book
-sh = Book.create!(name:'1991 Sacred Harp')
-puts "Create one book"
+ sh = Book.create!(name:'1991 Sacred Harp')
+# puts "Create one book"
 
 #create songs
-hall =Song.create!(number:'146', name:'Hallelujah')
-mess = Song.create!(number:'131t', name: 'Messiah')
-afri = Song.create!(number: '178', name: 'Africa')
+hall =Song.create!(number:'146', name:'Hallelujah', book: Book.find_by(name:'1991 Sacred Harp'))
+mess = Song.create!(number:'131t', name: 'Messiah', book: Book.find_by(name:'1991 Sacred Harp'))
+afri = Song.create!(number: '178', name: 'Africa', book: Book.find_by(name:'1991 Sacred Harp'))
 puts "Creates 3 songs"
 
 #put songs in book

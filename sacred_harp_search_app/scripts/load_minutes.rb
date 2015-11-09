@@ -37,7 +37,7 @@
 #     },
 require 'json'
 
-file = File.read("data/Minutes_All.json")
+file = File.read("data/minutes_test.json")
 
 minutes = JSON.parse(file)
 
