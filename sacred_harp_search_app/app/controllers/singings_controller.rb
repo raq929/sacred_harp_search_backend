@@ -28,7 +28,9 @@ class SingingsController < OpenReadController
 
   def destroy
     singing = Singing.find(params[:id])
-    singing.calls.destroy_all
+    singing.calls.each do |call|
+      call.destroy
+    end
     if singing.destroy
       head :no_content
     else

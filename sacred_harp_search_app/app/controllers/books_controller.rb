@@ -43,13 +43,9 @@ class BooksController < OpenReadController
     head :no_content
   end
 
-  def set_book
-    @book = current_user.books.find(params[:id])
-  end
-
   def book_params
     params.require(:book).permit(:name)
   end
 
-  private :set_book, :book_params
+  private :book_params
 end

@@ -6,7 +6,7 @@ class CallsController < OpenReadController
      song = Song.find(call.song_id)
 
      {song: {number: song.number, name: song.name}, singing: {name: singing.name, location: singing.location, date: singing.date}, caller: caller.name}
-   end
+  end
 
   def index
     #if its a request from a certain caller
@@ -26,11 +26,9 @@ class CallsController < OpenReadController
       singing_id = params[:song_id]
       Call.where(song_id: song_id).find_each do |call|
         result.push(callInfo(call))
-    end
-    else
-      Call.each do |call|
-        result.push(callInfo(call))
       end
+    else
+      result.push(Call.all)
     end
     render json: result
   end
