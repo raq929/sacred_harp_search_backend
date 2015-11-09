@@ -4,7 +4,6 @@ class SongsController < OpenReadController
   end
 
   def show
-
+    render json: Song.find(params[:id])
   end
-
 end

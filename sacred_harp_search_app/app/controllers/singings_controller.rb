@@ -16,6 +16,26 @@ class SingingsController < OpenReadController
     end
   end
 
+  def update
+    singing = Singing.find(params[:id])
+    singing.update(singing_params)
+    if singing.save
+      render json: singing
+    else
+      render json: singing.errors, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    singing = Singing.find(params[:id])
+    singing.calls.destroy_all
+    if singing.destroy
+      head :no_content
+    else
+      render json: singing.errors, status: :unprocessable_entity
+    end
+  end
+
 private
    def singing_params
     params.require(:singing).permit([
