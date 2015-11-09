@@ -34,6 +34,17 @@ Rails.application.routes.draw do
     resources :singings do
       resources :calls
     end
+
+    resources :songs do
+      resources :calls
+    end
+
+  post '/register' => 'auth#register'
+  # patch '/confirm' => 'auth#confirm'
+  post '/login' => 'auth#login'
+  delete '/logout/:id' => 'auth#logout'
+
+  resources :users, except: [:new, :edit]
   # Example resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales

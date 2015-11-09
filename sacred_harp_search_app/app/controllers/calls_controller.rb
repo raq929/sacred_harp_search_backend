@@ -10,27 +10,29 @@ class CallsController < OpenReadController
 
   def index
     #if its a request from a certain caller
+    result = []
     if params[:caller_id]
       caller_id = params[:caller_id]
-      result = []
       Call.where(caller_id: caller_id).find_each do |call|
         result.push(callInfo(call))
       end
-      render json: result
     #if it's a request for info on a certain singing
     elsif params[:singing_id]
       singing_id = params[:singing_id]
-      result = []
       Call.where(singing_id: singing_id).find_each do |call|
         result.push(callInfo(call))
       end
-      render json: result
+    elsif params[:song_id]
+      singing_id = params[:song_id]
+      Call.where(song_id: song_id).find_each do |call|
+        result.push(callInfo(call))
+    end
     else
       Call.each do |call|
         result.push(callInfo(call))
       end
-      render json: result
     end
+    render json: result
   end
 
   def show
@@ -39,21 +41,6 @@ class CallsController < OpenReadController
       song = Song.find(Call.find(params[:id]).song_id)
 
       render json: {song: song, singing: singing, caller: caller}
-  end
-
-  def create
-    new_call = Call.create(call_params)
-    if new_call.save
-      render json: new_call, status: :created
-    else
-      render json: new_person.errors, status: :unprocessable_entity
-    end
-  end
-
-  def update
-  end
-
-  def destroy
   end
 
   private
