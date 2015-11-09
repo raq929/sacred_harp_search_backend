@@ -10,5 +10,5 @@
 
 #
 class BookSerializer < ActiveModel::Serializer
-  attributes :id, :title, :isbn
+  attributes :id, :name
 end
