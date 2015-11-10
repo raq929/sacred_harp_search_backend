@@ -42,12 +42,19 @@ class SingingsController < OpenReadController
     end
   end
 
-private
-   def singing_params
-    params.require(:singing).permit([
-      :name,
-      :location,
-      :date
-      ])
+  def upload
+    uploaded_io = params[:name][:location][:date][:csv]
+    File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
+
+    end
   end
+
+  private
+     def singing_params
+      params.require(:singing).permit([
+        :name,
+        :location,
+        :date
+        ])
+    end
 end

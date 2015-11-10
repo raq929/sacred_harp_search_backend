@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       resources :calls
     end
 
+  map.resources :singings, :new => { :upload => :singing }
   post '/register' => 'auth#register'
   # patch '/confirm' => 'auth#confirm'
   post '/login' => 'auth#login'
