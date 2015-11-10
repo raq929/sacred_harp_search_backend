@@ -25,23 +25,23 @@ Rails.application.routes.draw do
   #       get 'sold'
   #     end
   #   end
-    resources :callers do
-      resources :calls
+    resources :callers, only: [:index, :show] do
+      resources :calls, only: [:index, :show]
     end
 
     resources :calls
 
-    resources :singings do
-      resources :calls
+    resources :singings, only: [:index, :show] do
+      resources :calls, only: [:index, :show]
     end
 
-    resources :songs do
-      resources :calls
+    resources :songs, only: [:index, :show] do
+      resources :calls, only: [:index, :show]
     end
 
-  map.resources :singings, :new => { :upload => :singing }
+  # map.resources :singings, :new => { :upload => :singing }
   post '/register' => 'auth#register'
-  # patch '/confirm' => 'auth#confirm'
+  patch '/confirm' => 'auth#confirm'
   post '/login' => 'auth#login'
   delete '/logout/:id' => 'auth#logout'
 
