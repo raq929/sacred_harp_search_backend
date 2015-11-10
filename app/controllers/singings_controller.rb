@@ -1,7 +1,16 @@
 class SingingsController < OpenReadController
   def index
-    if params[:name]
-      render json: Singing.find_by(name: params[:name])
+    if params[:name] && params[:date]
+      singing = Singing.find_by(name: params[:name], date: params[:date])
+      if singing
+        render json: singing
+      else
+        singings = Array.new
+        Singing.find_each do |singing|
+          singings.push(singing) if singing.name = params[:name]
+        end
+        render json: singings
+      end
     else
     render json: Singing.all
     end
