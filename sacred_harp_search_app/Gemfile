@@ -19,6 +19,8 @@ gem 'rails-api'
 #file/image upload
 gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 
+gem 'aws-sdk-v1'
+gem 'dotenv-rails'
 
 # Use SCSS for stylesheets
 # gem 'sass-rails', '~> 5.0'
