@@ -16,7 +16,8 @@ gem 'active_model_serializers'
 # Reduce rails kitchen sink approach
 gem 'rails-api'
 
-gem "active_model_serializers"
+#file/image upload
+gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 
 
 # Use SCSS for stylesheets
