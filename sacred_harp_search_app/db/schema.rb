@@ -38,7 +38,6 @@ ActiveRecord::Schema.define(version: 20151108171957) do
 
   add_index "calls", ["caller_id"], name: "index_calls_on_caller_id", using: :btree
   add_index "calls", ["singing_id"], name: "index_calls_on_singing_id", using: :btree
-  add_index "calls", ["song_id", "singing_id"], name: "index_calls_on_song_id_and_singing_id", unique: true, using: :btree
   add_index "calls", ["song_id"], name: "index_calls_on_song_id", using: :btree
 
   create_table "singings", force: :cascade do |t|
@@ -57,6 +56,7 @@ ActiveRecord::Schema.define(version: 20151108171957) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "book_id"
+    t.string   "title_ordinal"
     t.string   "meter_name"
     t.string   "meter_count"
     t.text     "song_text"
@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 20151108171957) do
   end
 
   add_index "songs", ["book_id"], name: "index_songs_on_book_id", using: :btree
-  add_index "songs", ["name", "book_id"], name: "index_songs_on_name_and_book_id", unique: true, using: :btree
+  add_index "songs", ["name", "title_ordinal", "book_id"], name: "index_songs_on_name_and_title_ordinal_and_book_id", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",           null: false

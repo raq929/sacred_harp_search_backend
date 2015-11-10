@@ -16,7 +16,6 @@ class Song < ActiveRecord::Base
   has_many :callers, through: :calls
   has_many :singings, through: :calls
 
-  validates :name, uniqueness: {scope: :book_id}
   validates :name, presence: true
   validates :book_id, presence: true
 end

@@ -29,51 +29,51 @@ def run
   recnum			= 0
 
 puts "["
-  CSV.parse(STDIN.set_encoding("MacRoman:utf-8").read, {:col_sep => "\t"}).each{|row|
+  CSV.parse(STDIN.set_encoding("MacRoman:utf-8").read, {:col_sep => "\t"}).each do |row|
 
-	# Read the header row
-	begin fieldnames = row; next end unless fieldnames
+  	# Read the header row
+  	begin fieldnames = row; next end unless fieldnames
 
-	# Read regular rows, decoding embedded newlines, removing " "
-	# around fields, and parsing values that appear to be floats or
-	# integers.
+  	# Read regular rows, decoding embedded newlines, removing " "
+  	# around fields, and parsing values that appear to be floats or
+  	# integers.
 
-	# Not handling encoding of " as "" inside field values because
-	# that does not occur in the input data, although it is part of
-	# the spec for "Merge" format.
+  	# Not handling encoding of " as "" inside field values because
+  	# that does not occur in the input data, although it is part of
+  	# the spec for "Merge" format.
 
-	rec 			= Hash[fieldnames.zip(row.map{|i|
-											i.gsub!(/\x0B/, "\n") 				# Merge format newlines embedded as ASCII 11 (Control-K aka \x0B).
-											i.gsub!(/^\"?(.*)\"$/m, "\\1") 		# Trim leading and trailing quotes.
-											i = ( i.valid_int?   ? Integer(i) :	# Convert to int or float if possible.
-												 (i.valid_float? ?   Float(i) : i))
-										  })]
+  	rec 			= Hash[fieldnames.zip(row.map{|i|
+  											i.gsub!(/\x0B/, "\n") 				# Merge format newlines embedded as ASCII 11 (Control-K aka \x0B).
+  											i.gsub!(/^\"?(.*)\"$/m, "\\1") 		# Trim leading and trailing quotes.
+  											i = ( i.valid_int?   ? Integer(i) :	# Convert to int or float if possible.
+  												 (i.valid_float? ?   Float(i) : i))
+  										  })]
 
-	## DEBUG: $stderr.puts "#{recnum += 1} / #{rec['Date']} / #{rec['Name']} / #{rec['Location']}"
+  	## DEBUG: $stderr.puts "#{recnum += 1} / #{rec['Date']} / #{rec['Name']} / #{rec['Location']}"
 
-	# Add a "Singers" field to the record by parsing the Minutes
-	# field.  It will be a list of records of singers with 'name' and
-	# 'songs', which itself will be a list of song markups.
+  	# Add a "Singers" field to the record by parsing the Minutes
+  	# field.  It will be a list of records of singers with 'name' and
+  	# 'songs', which itself will be a list of song markups.
 
-	minutes			= rec["Minutes"]
+  	minutes			= rec["Minutes"]
 
-	singers_raw		= minutes.scan(singer_match)
+  	singers_raw		= minutes.scan(singer_match)
 
-	rec['Singers']	= singers_raw.map{|pair|
-	  name, songs 	= pair
-	  songlist		= songs.scan(song_markup).flatten
-	  info			= {
-		'name' 		=> name,
-		# 'songs_raw'	=> songs,
-		'songs' 	=> songlist,
-	  }
-	}
+  	rec['Singers']	= singers_raw.map{|pair|
+  	  name, songs 	= pair
+  	  songlist		= songs.scan(song_markup).flatten
+  	  info			= {
+  		'name' 		=> name,
+  		# 'songs_raw'	=> songs,
+  		'songs' 	=> songlist,
+  	  }
+  	}
 
-	# Output as json, in 'pretty' format for easier reading.
+  	# Output as json, in 'pretty' format for easier reading.
 
-	puts JSON.pretty_generate(rec)
-  puts ","
-  }
+  	puts JSON.pretty_generate(rec)
+    puts ","
+  end
   puts "]"
 end
 
