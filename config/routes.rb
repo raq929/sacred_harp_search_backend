@@ -29,8 +29,6 @@ Rails.application.routes.draw do
       resources :calls, only: [:index, :show]
     end
 
-    resources :calls
-
     resources :singings do
       resources :calls, only: [:index, :show]
     end
