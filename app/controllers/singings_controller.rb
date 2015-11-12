@@ -126,7 +126,7 @@ class SingingsController < OpenReadController
   end
 
   def update
-    singing = Singing.find(singing_params[:id])
+    singing = Singing.find(params[:id])
     singing.update(singing_params)
     if singing.save
       render json: singing
@@ -136,7 +136,7 @@ class SingingsController < OpenReadController
   end
 
   def destroy
-    singing = Singing.find(singing_params[:id])
+    singing = Singing.find(params[:id])
     singing.calls.each do |call|
       call.destroy
     end
