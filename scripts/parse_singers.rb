@@ -9,6 +9,9 @@
 # likely Denson songs and thus marked up with [xxx] or {xxx} or
 # [xxx//xxx].
 
+# Usage:
+# ruby scripts/parse_singers.rb < data/Minutes_All.txt > data/Minutes_All.json
+
 def run
 
   # Definition of format for parsing people's names and songs:

@@ -1,10 +1,5 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+require 'json'
+require 'csv'
 
 Call.destroy_all
 Song.destroy_all
@@ -12,39 +7,71 @@ Book.destroy_all
 
 Caller.destroy_all
 Singing.destroy_all
+User.destroy_all
 
-#Create book
- sh = Book.create!(name:'1991 Sacred Harp')
-# puts "Create one book"
+Book.find_or_create_by(name:"1991 Sacred Harp")
+book = Book.find_by(name: "1991 Sacred Harp")
+p book
 
-#create songs
-hall =Song.create!(number:'146', name:'Hallelujah', book: Book.find_by(name:'1991 Sacred Harp'))
-mess = Song.create!(number:'131t', name: 'Messiah', book: Book.find_by(name:'1991 Sacred Harp'))
-afri = Song.create!(number: '178', name: 'Africa', book: Book.find_by(name:'1991 Sacred Harp'))
-puts "Creates 3 songs"
+CSV.foreach "../data/SongData_Denson_1991.txt", {headers: true, encoding: "MacRoman:UTF-8"} do |row|
+   Song.find_or_create_by!(number: row["PageNum"], book_id: book[:id], name: row["Title"], meter_name: row["MeterName"], meter_count: row["MeterCount"], song_text: row["SongText"], composer_first_name: row["Comp1First"], composer_last_name: row["Comp1Last"], composition_date: row["Comp1Date"], poet_first_name: row["Poet1First"], post_last_name: row["Poet1Last"])
+end
 
-#put songs in book
-sh.songs << hall
-sh.songs << mess
-sh.songs << afri
 
-#creates callers
-r = Caller.create!(name:'Rachel Stevens')
-m = Caller.create!(name: 'Myles Dakan')
-b = Caller.create!(name: "Ben Sachs-Hamilton")
-puts "creates 3 callers"
+file = File.read("../data/Minutes_All.json")
 
-#creates singings
+minutes = JSON.parse(file)
 
-osc = Singing.create!(name: 'Ohio State Convention', location: 'Dayton, Ohio', date:'2005-02-27')
-pvs = Singing.create!(name: 'Pioneer Valley Singing', location: 'Northampton, MA', date:'2011-05-23')
-wm = Singing.create!(name: 'Western Mass Convention', location: 'Amherst, MA', date:'2013-08-13')
-puts "creates 3 singings"
+minutes.each do |singing|
+  if singing["IsDenson"] == 1
+    new_singing = Singing.find_or_create_by!(name: singing["Name"], location: singing["Location"], date: singing["Date"])
+    singing_id = new_singing[:id]
+    singing["Singers"].each do |singer|
+      caller = Caller.find_or_create_by!(name: singer["name"])
+      caller_id = caller[:id]
+      singer["songs"].each do |song|
+        # matches unambiguous calls
+        # returns MatchData or nil
+        # capture 1 is song number
+        match =  /\[(\d+[tb]?)\]/.match(song)
+        if match
+           found = Song.find_by(number: match[1])
+           song_id = found[:id]
+           Call.create!(singing_id: singing_id, caller_id: caller_id, song_id: song_id)
+           puts "Call created - valid"
+        else
+        # matches ambiguous calls
+        # returns MatchData or nil
+        # capture 1 is song number
+          match = /\{(\d+[tb]?)\}/.match(song)
+          if match
+            song = Song.find_or_create_by!(number: match[1], book_id: Book.find_by(name:"1991 Sacred Harp")[:id], name: "Ambiguous Call")
+            Call.create!(singing_id: singing_id, caller_id: caller_id, song_id: song[:id])
+            puts "Call created - ambiguous"
+          else
+            # matches corrected calls
+            # returns MatchData or nil
+            # capture 1 is original song number
+            # capture 2 is corrected song number
+            match = /\[(\d+[tb]?)\/\/(\d+[tb]?)\]/.match(song)
+            if match
+              Call.create!(singing_id: singing_id, caller_id: caller_id, song_id: Song.find_by(number: match[2])[:id])
+              puts "Call created - corrected"
+            else
+              # matches uncorrectable calls
+              # returns MatchData or nil
+              # capture 1 is song number
+              match = /<(\d+[tb]?)>/.match(song)
+              if match
+                song = Song.find_or_create!(number: match[1], book_id: Book.find_by("1991 Sacred Harp"), name: "Uncorrectable Call")
+                Call.create!(singing_id: singing_id, caller_id: caller_id, song_id: song[:id])
+                puts "Call created - uncorrectable"
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
 
-c1 = Call.create!(song_id: hall.id, caller_id: r.id, singing_id: osc.id)
-c2 = Call.create!(song_id: mess.id, caller_id: b.id, singing_id: osc.id)
-c3 = Call.create!(song_id: afri.id, caller_id: b.id, singing_id: osc.id)
-c4 = Call.create!(song_id: hall.id, caller_id: r.id, singing_id: wm.id)
-c5 = Call.create!(song_id: afri.id, caller_id: m.id, singing_id: wm.id)
-c6 = Call.create!(song_id: hall.id, caller_id: m.id, singing_id: pvs.id)
-puts "creates 6 calls"
