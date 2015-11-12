@@ -18,12 +18,12 @@ Song.create!(name:"The Young Convert", number:"24b")
 
 
 
-CSV.foreach "../data/SongData_Denson_1991.txt", {headers: true, encoding: "MacRoman:UTF-8"} do |row|
-   Song.find_or_create_by!(number: row["PageNum"], book_id: book[:id], name: row["Title"], meter_name: row["MeterName"], meter_count: row["MeterCount"], song_text: row["SongText"], composer_first_name: row["Comp1First"], composer_last_name: row["Comp1Last"], composition_date: row["Comp1Date"], poet_first_name: row["Poet1First"], post_last_name: row["Poet1Last"])
+CSV.parse "https://s3.amazonaws.com/sacredharpsearch/SongData_Denson_1991.txt", {headers: true, encoding: "MacRoman:UTF-8"} do |row|
+   Song.find_or_create_by!(number: row["PageNum"], book_id: book[:id], name: row["Title"], meter_name: row["MeterName"], meter_count: row["MeterCount"], song_text: row["SongText"], composer_first_name: row["Comp1First"], composer_last_name: row["Comp1Last"], composition_date: row["Comp1Date"], poet_first_name: row["Poet1First"], poet_last_name: row["Poet1Last"])
 end
 
 
-file = File.read("../data/Minutes_All.json")
+file = File.read("https://s3.amazonaws.com/sacredharpsearch/Minutes_All.json")
 
 minutes = JSON.parse(file)
 
