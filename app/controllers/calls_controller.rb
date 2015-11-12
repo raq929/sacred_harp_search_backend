@@ -5,7 +5,7 @@ class CallsController < OpenReadController
      singing = Singing.find(call.singing_id)
      song = Song.find(call.song_id)
 
-     {song: {number: song.number, name: song.name}, singing: {name: singing.name, location: singing.location, date: singing.date}, caller: caller.name}
+     {song: {number: song.number, name: song.name, book: song.book}, singing: {name: singing.name, location: singing.location, date: singing.date}, caller: caller.name}
   end
 
   def index

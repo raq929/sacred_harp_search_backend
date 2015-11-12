@@ -1,7 +1,7 @@
 # require "./scripts/minutes_parser.rb"
 
 require 'csv'
-# require_relative 'denson_parse_one.rb'
+# require './scripts/denson_parse_one.rb'
 
 def parse_minutes_shenandoah singing_id, params
     # render json: singing_id
@@ -18,8 +18,9 @@ def parse_minutes_shenandoah singing_id, params
 end
 
 def parse_minutes_denson singing_id, params
-  # book_id = Book.find_by(name:"1991 Sacred Harp")[:id]
-  # minutes = denson_parse_one(params[:csv])
+  book_id = Book.find_by(name:"1991 Sacred Harp")[:id]
+  minutes = denson_parse_one(params[:csv])
+  # render json: minutes
   # minutes["Singers"].each do |call|
   #   caller_id = Caller.find_or_create_by!(name: call["name"])[:id]
   #   call["songs"].each do |song|
@@ -29,21 +30,77 @@ def parse_minutes_denson singing_id, params
   # end
 end
 
+def denson_parse_one text
+  # Definition of format for parsing people's names and songs:
+  songnum     = %r{\d{2,3}[tb]?}                # 24 or 306 or 306t or 95b
+  song_markup   = %r{(?:\[#{songnum}\]) |           # [306t]
+               (?:\{#{songnum}\}) |           # {306}
+               (?:\[#{songnum}//#{songnum}\])       # [306//306t]
+              }x
+  song_sequence   = %r{#{song_markup}(?:(?:, ?#{song_markup})*)}  # [28], {29} ... etc.
+  name_part     = %r{(?:[[:upper:]][[:alpha:]\.\-\']*)}     # B or B. or B.G. or Bill or BILL but not 'bill'
+  person_name   = %r{#{name_part}(?:(?: #{name_part})*)}    # One or more name_part separated by spaces
+  singer_match    = %r{(#{person_name}) (#{song_sequence})}   # A name followed by a list of songs
+
+  # Parse...
+
+  fieldnames    = nil
+  recnum      = 0
+  rec = nil
+  render json: CSV.parse(text, {headers: true, :col_sep => "\t"})
+  CSV.parse(text, {headers: true, :col_sep => "\t"}).each do |row|
+    render json: row
+    # Read the header row
+    begin fieldnames = row; next end unless fieldnames
+
+    # Read regular rows, decoding embedded newlines, removing " "
+    # around fields, and parsing values that appear to be floats or
+    # integers.
+
+    # Not handling encoding of " as "" inside field values because
+    # that does not occur in the input data, although it is part of
+    # the spec for "Merge" format.
+
+    rec       = Hash[fieldnames.zip(row.map{|i|
+                        i.gsub!(/\x0B/, "\n")         # Merge format newlines embedded as ASCII 11 (Control-K aka \x0B).
+                        i.gsub!(/^\"?(.*)\"$/m, "\\1")    # Trim leading and trailing quotes.
+                        i = ( i.valid_int?   ? Integer(i) : # Convert to int or float if possible.
+                           (i.valid_float? ?   Float(i) : i))
+                        })]
+
+    ## DEBUG: $stderr.puts "#{recnum += 1} / #{rec['Date']} / #{rec['Name']} / #{rec['Location']}"
+
+    # Add a "Singers" field to the record by parsing the Minutes
+    # field.  It will be a list of records of singers with 'name' and
+    # 'songs', which itself will be a list of song markups.
+
+    minutes     = rec["Minutes"]
+
+    singers_raw   = minutes.scan(singer_match)
+
+    rec['Singers']  = singers_raw.map{|pair|
+      name, songs   = pair
+      songlist    = songs.scan(song_markup).flatten
+      info      = {
+      'name'    => name,
+      # 'songs_raw' => songs,
+      'songs'   => songlist,
+      }
+    }
+  end
+
+end
+
 class SingingsController < OpenReadController
   def index
-    if params[:name] && params[:date]
-      singing = Singing.find_by(name: params[:name], date: params[:date])
-      if singing
-        render json: singing
-      else
+    if params[:name]
         singings = Array.new
         Singing.find_each do |singing|
           singings.push(singing) if singing.name = params[:name]
         end
         render json: singings
-      end
     else
-    render json: Singing.all
+      render json: Singing.all
     end
   end
 
@@ -65,7 +122,7 @@ class SingingsController < OpenReadController
       end
     end
 
-    render json: {singing: new_singing, calls: new_singing.calls}
+    # render json: {singing: new_singing, calls: new_singing.calls}
   end
 
   def update
