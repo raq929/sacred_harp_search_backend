@@ -23,7 +23,7 @@ gem 'aws-sdk-v1'
 gem 'dotenv-rails'
 
 gem 'rename'
-
+gem 'httparty'
 # Use SCSS for stylesheets
 # gem 'sass-rails', '~> 5.0'
 # # Use Uglifier as compressor for JavaScript assets
