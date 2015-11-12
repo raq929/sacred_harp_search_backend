@@ -13,11 +13,23 @@ The database contains 6 tables:
 *Callers
 *Singings
 *Calls - join table for books, songs, and callers
-*Users
+*Users - not attached to other tables
+
+(shs_ERD.png)
 
 # Data
 
 The data I am using comes from Sacred Harp minutes from 1995-2015, which SHMHA generously granted me access to. They also provided a Ruby script to help me get that data into a useable form.
+
+Getting a handle on the data was one of the more difficult aspects of this project, because it was 'dirty' data. Songs calls in the data were marked up to reflect whether they had been original, corrected, ambiguous, or erroneous, and I had to make decisions about how to store that data in my database.
+The other data issue that I have not yet dealt with is that of multiple names. Because the minutes are written by the secretary at each singing, Ben Sachs-Hamilton might be in the database as "Ben Sachs-Hamilton", "Ben Sachs Hamilton", "Benjamin Sachs-Hamilton", etc. I want to eventually have a table with all the possible spellings, and have those refer to a 'preferred spelling' table, which has one name for each person. However, determining which names were original and which were duplicates was beyond the scope of this project.
+
+#Creating singings
+One of the features of this project is that admins can upload minutes (in the formats approved by parent organizations), and they will load into the database. This involved parsing multiple forms of data (csv, tab separated values) and creating new records in the database.
+
+
+
+
 
 
 
