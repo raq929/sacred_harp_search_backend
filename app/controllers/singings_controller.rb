@@ -94,11 +94,11 @@ end
 class SingingsController < OpenReadController
   def index
     if params[:name]
-        singings = Array.new
-        Singing.find_each do |singing|
-          singings.push(singing) if singing.name = params[:name]
+        singings_by_name = Array.new
+        Singing.find_each do |s|
+          singings_by_name.push(s) if s.name == params[:name]
         end
-        render json: singings
+        render json: singings_by_name
     else
       render json: Singing.all
     end
