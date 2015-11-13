@@ -16,7 +16,7 @@ The database contains 6 tables:
 * Calls - join table for books, songs, and callers
 * Users - not attached to other tables
 
-[https://s3.amazonaws.com/sacredharpsearch/shs_ERD.png]
+![ERD diagram](https://s3.amazonaws.com/sacredharpsearch/shs_ERD.png)
 
 ## Data
 
