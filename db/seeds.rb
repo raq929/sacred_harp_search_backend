@@ -1,5 +1,6 @@
 require 'json'
 require 'csv'
+require 'open-uri'
 
 Call.destroy_all
 Song.destroy_all
@@ -17,16 +18,18 @@ Song.create!(name:"Chapter X - Singing Excercises", number:"24t", book_id: harp.
 Song.create!(name:"The Young Convert", number:"24b", book_id: harp[:id])
 User.create!(email: "r@r.com", password: "123", admin: true)
 
+song_data = open("https://s3.amazonaws.com/sacredharpsearch/SongData_Denson_1991.txt")
 
+all_minutes = open("https://s3.amazonaws.com/sacredharpsearch/Minutes_All.json")
 
-CSV.parse "https://s3.amazonaws.com/sacredharpsearch/SongData_Denson_1991.txt", {headers: true, encoding: "MacRoman:UTF-8"} do |row|
+CSV.foreach song_data, {headers: true, encoding: "MacRoman:UTF-8"} do |row|
    Song.find_or_create_by!(number: row["PageNum"], book_id: shen[:id], name: row["Title"], meter_name: row["MeterName"], meter_count: row["MeterCount"], song_text: row["SongText"], composer_first_name: row["Comp1First"], composer_last_name: row["Comp1Last"], composition_date: row["Comp1Date"], poet_first_name: row["Poet1First"], poet_last_name: row["Poet1Last"])
 end
 
 
-file = File.read("https://s3.amazonaws.com/sacredharpsearch/Minutes_All.json")
+# file = File.read("https://s3.amazonaws.com/sacredharpsearch/Minutes_All.json")
 
-minutes = JSON.parse(file)
+minutes = JSON.parse(all_minutes)
 
 minutes.each do |singing|
   if singing["IsDenson"] == 1
