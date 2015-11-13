@@ -27,9 +27,9 @@ CSV.foreach song_data, {headers: true, encoding: "MacRoman:UTF-8"} do |row|
 end
 
 
-# file = File.read("https://s3.amazonaws.com/sacredharpsearch/Minutes_All.json")
+file = File.read(all_minutes)
 
-minutes = JSON.parse(all_minutes)
+minutes = JSON.parse(file)
 
 minutes.each do |singing|
   if singing["IsDenson"] == 1
