@@ -8,8 +8,8 @@ def parse_minutes_shenandoah singing_id, params
     calls = Array.new
     book_id = Book.find_by(name:"Shenandoah Harmony")[:id]
     CSV.parse(params, {headers: true}) do |call|
-
-      song_id = Song.find_or_create_by!(number: call["Page"], name: call["Song Title"], book_id: book_id)[:id]
+      render json: call
+      song_id = Song.find_or_create_by!(number: call["Page"], name: call["Song Title"], book_id: book_id)
       caller_id = Caller.find_or_create_by!(name: call["Name(s)"])[:id]
       new_call = Call.create!(song_id: song_id, caller_id: caller_id, singing_id: singing_id)
       calls.push(new_call)
