@@ -23,7 +23,7 @@ song_data = open("https://s3.amazonaws.com/sacredharpsearch/SongData_Denson_1991
 all_minutes = open("https://s3.amazonaws.com/sacredharpsearch/Minutes_All.json")
 
 CSV.foreach song_data, {headers: true, encoding: "MacRoman:UTF-8"} do |row|
-   Song.find_or_create_by!(number: row["PageNum"], book_id: shen[:id], name: row["Title"], meter_name: row["MeterName"], meter_count: row["MeterCount"], song_text: row["SongText"], composer_first_name: row["Comp1First"], composer_last_name: row["Comp1Last"], composition_date: row["Comp1Date"], poet_first_name: row["Poet1First"], poet_last_name: row["Poet1Last"])
+   Song.find_or_create_by!(number: row["PageNum"], book_id: shen[:id], name: row["Title"], meter_name: row["MeterName"], meter_count: row["MeterCount"], song_text: row["SongText"], composer_first_name: row["Comp1First"], composer_last_name: row["Comp1Last"], composition_date: row["Comp1Date"])
 end
 
 
