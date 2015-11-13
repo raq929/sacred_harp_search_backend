@@ -12,10 +12,10 @@ User.destroy_all
 harp = Book.create!(name:"1991 Sacred Harp")
 shen = Book.create!(name:"Shenandoah Harmony")
 
-Song.create!(name:"Fire Alarm", number:"25", book: harp)
+Song.create!(name:"Fire Alarm", number:"25", book: harp[:id])
 Song.create!(name:"Chapter X - Singing Excercises", number:"24t", book: harp.id)
-Song.create!(name:"The Young Convert", number:"24b", book: harp)
-User.create!(email: "r@r.com", password: "123", admin: true, book: harp.id)
+Song.create!(name:"The Young Convert", number:"24b", book: harp[:id])
+User.create!(email: "r@r.com", password: "123", admin: true, book: harp[:id])
 
 
 
