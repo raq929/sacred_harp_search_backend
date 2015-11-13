@@ -20,7 +20,7 @@ The database contains 6 tables:
 
 ## Data
 
-The data I am using comes from Sacred Harp minutes from 1995-2015, which SHMHA generously granted me access to. They also provided a Ruby script to help me get that data into a useable form.
+The data I am using comes from Sacred Harp minutes from 1995-2015, which SHMHA generously granted me access to. They also provided a Ruby script (parse_singingers.rb) to help me get that data into a useable form.
 
 Getting a handle on the data was one of the more difficult aspects of this project, because it was 'dirty' data. Songs calls in the data were marked up to reflect whether they had been original, corrected, ambiguous, or erroneous, and I had to make decisions about how to store that data in my database.
 The other data issue that I have not yet dealt with is that of multiple names. Because the minutes are written by the secretary at each singing, Ben Sachs-Hamilton might be in the database as "Ben Sachs-Hamilton", "Ben Sachs Hamilton", "Benjamin Sachs-Hamilton", etc. I want to eventually have a table with all the possible spellings, and have those refer to a 'preferred spelling' table, which has one name for each person. However, determining which names were original and which were duplicates was beyond the scope of this project.
