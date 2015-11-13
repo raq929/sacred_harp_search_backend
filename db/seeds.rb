@@ -15,7 +15,7 @@ shen = Book.create!(name:"Shenandoah Harmony")
 Song.create!(name:"Fire Alarm", number:"25", book_id: harp[:id])
 Song.create!(name:"Chapter X - Singing Excercises", number:"24t", book_id: harp.id)
 Song.create!(name:"The Young Convert", number:"24b", book_id: harp[:id])
-User.create!(email: "r@r.com", password: "123", admin: true, book_id: harp[:id])
+User.create!(email: "r@r.com", password: "123", admin: true)
 
 
 
