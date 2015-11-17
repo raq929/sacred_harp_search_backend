@@ -1,9 +1,9 @@
 # Sacred Harp Search Backend
 Ruby on Rails backend for Sacred Harp Search App
-[Front end repository](https://github.com/raq929/sacred_harp_search_frontend)
-[Wireframes and user stories](https://github.com/raq929/sacred_harp_search_frontend/tree/master/images/planning)
-[Deploted site](http://raq929.github.io/sacred_harp_search_frontend)
-[Deployed backend](https://mighty-shelf-9974.herokuapp.com/)
+* [Front end repository](https://github.com/raq929/sacred_harp_search_frontend)
+* [Wireframes and user stories](https://github.com/raq929/sacred_harp_search_frontend/tree/master/images/planning)
+* [Deploted site](http://raq929.github.io/sacred_harp_search_frontend)
+* [Deployed backend](https://mighty-shelf-9974.herokuapp.com/)
 
 ##A brief description of Sacred Harp Singings
 At a Sacred Harp Singing, singers sit in a square. Singers agree upon a book or books that will be sung from at that singing. People who want to lead songs (Callers), get up one by one and call a song, which everyone sings. Singings are generally one or two days. Songs cannot be sung more than once a day.
