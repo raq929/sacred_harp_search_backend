@@ -2,7 +2,7 @@
 Ruby on Rails backend for Sacred Harp Search App
 * [Front end repository](https://github.com/raq929/sacred_harp_search_frontend)
 * [Wireframes and user stories](https://github.com/raq929/sacred_harp_search_frontend/tree/master/images/planning)
-* [Deploted site](http://raq929.github.io/sacred_harp_search_frontend)
+* [Deployed site](http://raq929.github.io/sacred_harp_search_frontend)
 * [Deployed backend](https://mighty-shelf-9974.herokuapp.com/)
 
 ##A brief description of Sacred Harp Singings
@@ -23,6 +23,7 @@ The database contains 6 tables:
 
 #Planning
 I wanted to be very clear about what the data structure of my site would be before I started building the api. I think that making sure this planning was solid and running it by several people before getting started probably saved me a lot of time overall.
+For this project, I did not have a clear plan for validation, serializers, or controllers, but after completing the project, I feel like I have a much better understanding of how these work, and I will be able to plan them much more clearly in the next project.
 
 ## Data
 
@@ -32,7 +33,7 @@ Getting a handle on the data was one of the more difficult aspects of this proje
 The other data issue that I have not yet dealt with is that of multiple names. Because the minutes are written by the secretary at each singing, Ben Sachs-Hamilton might be in the database as "Ben Sachs-Hamilton", "Ben Sachs Hamilton", "Benjamin Sachs-Hamilton", etc. I want to eventually have a table with all the possible spellings, and have those refer to a 'preferred spelling' table, which has one name for each person. However, determining which names were original and which were duplicates was beyond the scope of this project.
 
 ## Creating singings
-One of the features of this project is that admins can upload minutes (in the formats approved by parent organizations), and they will load into the database. This involved parsing multiple forms of data (csv, tab separated values) and creating new records in the database.
+One of the features of this project is that admins can upload minutes (in the formats approved by parent organizations), and they will load into the database. This involved parsing multiple forms of data (csv, tab separated values) and creating new records in the database. Unfortunately, I somehow managed to lose some of my work on this feature, so it is not currently operational.
 
 ##What I learned
 - How to use CSV files and how to parse them (from a file, or from a string).
@@ -42,7 +43,7 @@ One of the features of this project is that admins can upload minutes (in the fo
 - Active Record Objects: I learned a lot about how they work.
 
 ## Things I'd like to add
-- more comprehensive minutes parser - able to interperet the minutes format and interpret it
+- more comprehensive minutes parser - able to identify the minutes format and interpret it
 - serializers: I kind of wrote my own for this project, because I didn't fully understand what they are capable of. I'd like to learn more about them and use them more.
 - Searching: I'd like to be able to search the database for partial strings and return options.
 - debug the function for parsing Denson book minutes
