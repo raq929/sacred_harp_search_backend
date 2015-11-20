@@ -7,12 +7,12 @@ def parse_minutes_shenandoah singing_id, params
     # render json: singing_id
     calls = Array.new
     book_id = Book.find_by(name:"Shenandoah Harmony")[:id]
-    CSV.parse(params, {headers: true}) do |call|
+    CSV.parse(singing_params[:csv], {headers: true}).first do |call|
       render json: call
-      song_id = Song.find_or_create_by!(number: call["Page"], name: call["Song Title"], book_id: book_id)
-      caller_id = Caller.find_or_create_by!(name: call["Name(s)"])[:id]
-      new_call = Call.create!(song_id: song_id, caller_id: caller_id, singing_id: singing_id)
-      calls.push(new_call)
+      # song_id = Song.find_or_create_by!(number: call["Page"], name: call["Song Title"], book_id: book_id)
+      # caller_id = Caller.find_or_create_by!(name: call["Name(s)"])[:id]
+      # new_call = Call.create!(song_id: song_id, caller_id: caller_id, singing_id: singing_id)
+      # calls.push(new_call)
     end
     # render json: calls
 end
@@ -110,17 +110,17 @@ class SingingsController < OpenReadController
 
   def create
     new_singing = nil
-    # render json: singing_params[:name]
-    Singing.transaction do
+    render json: {"csv": singing_params[:csv]}
+    # Singing.transaction do
 
-      new_singing = Singing.create!(name: singing_params[:name], location: singing_params[:location], date: singing_params[:date])
-      singing_id = new_singing[:id]
-      if singing_params[:book] == "Shenandoah Harmony"
-        parse_minutes_shenandoah(singing_id, singing_params[:csv])
-      elsif singing_params[:book] == "1991 Sacred Harp"
-        parse_minutes_denson(singing_id, singing_params)
-      end
-    end
+    #   new_singing = Singing.create!(name: singing_params[:name], location: singing_params[:location], date: singing_params[:date])
+    #   singing_id = new_singing[:id]
+    #   if singing_params[:book] == "Shenandoah Harmony"
+    #     parse_minutes_shenandoah(singing_id, singing_params[:csv])
+    #   elsif singing_params[:book] == "1991 Sacred Harp"
+    #     parse_minutes_denson(singing_id, singing_params)
+    #   end
+    # end
 
     # render json: {singing: new_singing, calls: new_singing.calls}
   end
