@@ -31,7 +31,7 @@ file = File.read(all_minutes)
 
 minutes = JSON.parse(file)
 
-song_ids = new Hash
+song_ids = Hash.new
 
 def getSongId songNumber
   if !song_ids[songNumber]
