@@ -31,6 +31,14 @@ file = File.read(all_minutes)
 
 minutes = JSON.parse(file)
 
+song_ids = new Hash
+
+def getSongId songNumber
+  if !song_ids[songNumber]
+    song_ids[songNumber] = Song.find_by!(songNumber)[:id]
+  return song_ids[songNumber]
+end
+
 minutes.each do |singing|
   if singing["IsDenson"] == 1
     new_singing = Singing.find_or_create_by!(name: singing["Name"], location: singing["Location"], date: singing["Date"])
@@ -44,7 +52,7 @@ minutes.each do |singing|
         # capture 1 is song number
         match =  /\[(\d+[tb]?)\]/.match(song)
         if match
-           found = Song.find_by(number: match[1])
+           found = Song.find_by!(number: match[1])
            song_id = found[:id]
            Call.create!(singing_id: singing_id, caller_id: caller_id, song_id: song_id)
         else
@@ -62,7 +70,7 @@ minutes.each do |singing|
             # capture 2 is corrected song number
             match = /\[(\d+[tb]?)\/\/(\d+[tb]?)\]/.match(song)
             if match
-              Call.create!(singing_id: singing_id, caller_id: caller_id, song_id: Song.find_by(number: match[2])[:id])
+              Call.create!(singing_id: singing_id, caller_id: caller_id, song_id: Song.find_by!(number: match[2])[:id])
             else
               # matches uncorrectable calls
               # returns MatchData or nil
