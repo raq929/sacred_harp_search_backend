@@ -21,9 +21,9 @@ def parse_minutes_shenandoah singing_id, csv
     render json: {calls: calls}
 end
 
-def parse_minutes_denson singing_id, params
+def parse_minutes_denson singing_id, csv
   book_id = Book.find_by(name:"1991 Sacred Harp")[:id]
-  minutes = denson_parse_one(params[:csv])
+  minutes = denson_parse_one(csv)
   # render json: minutes
   # minutes["Singers"].each do |call|
   #   caller_id = Caller.find_or_create_by!(name: call["name"])[:id]
@@ -123,7 +123,7 @@ class SingingsController < OpenReadController
         if singing_params[:book] == "Shenandoah Harmony"
           parse_minutes_shenandoah(singing_id, singing_params[:csv])
         elsif singing_params[:book] == "1991 Sacred Harp"
-          parse_minutes_denson(singing_id, singing_params)
+          parse_minutes_denson(singing_id, singing_params[:csv])
         end
       end
     rescue ActiveRecord::RecordInvalid => e
