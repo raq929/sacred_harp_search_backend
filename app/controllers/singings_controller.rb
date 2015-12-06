@@ -3,18 +3,21 @@
 require 'csv'
 # require './scripts/denson_parse_one.rb'
 
-def parse_minutes_shenandoah singing_id, params
+def parse_minutes_shenandoah singing_id, csv
     # render json: singing_id
     calls = Array.new
     book_id = Book.find_by(name:"Shenandoah Harmony")[:id]
-    CSV.parse(singing_params[:csv], {headers: true}).first do |call|
-      render json: call
+    count = 0
+    CSV.parse(csv, {headers: true}).first do |call|
+      count += 1
+      # render json: call
       # song_id = Song.find_or_create_by!(number: call["Page"], name: call["Song Title"], book_id: book_id)
       # caller_id = Caller.find_or_create_by!(name: call["Name(s)"])[:id]
       # new_call = Call.create!(song_id: song_id, caller_id: caller_id, singing_id: singing_id)
       # calls.push(new_call)
     end
     # render json: calls
+    render json: count;
 end
 
 def parse_minutes_denson singing_id, params
@@ -110,17 +113,23 @@ class SingingsController < OpenReadController
 
   def create
     new_singing = nil
-    render json: {"csv": singing_params[:csv]}
-    # Singing.transaction do
+    begin
+      Singing.transaction do
 
-    #   new_singing = Singing.create!(name: singing_params[:name], location: singing_params[:location], date: singing_params[:date])
-    #   singing_id = new_singing[:id]
-    #   if singing_params[:book] == "Shenandoah Harmony"
-    #     parse_minutes_shenandoah(singing_id, singing_params[:csv])
-    #   elsif singing_params[:book] == "1991 Sacred Harp"
-    #     parse_minutes_denson(singing_id, singing_params)
-    #   end
-    # end
+        new_singing = Singing.create!(name: singing_params[:name], location: singing_params[:location], date: singing_params[:date])
+        singing_id = new_singing[:id]
+        if singing_params[:book] == "Shenandoah Harmony"
+          parse_minutes_shenandoah(singing_id, singing_params[:csv])
+        elsif singing_params[:book] == "1991 Sacred Harp"
+          parse_minutes_denson(singing_id, singing_params)
+        end
+      end
+    rescue ActiveRecord::RecordInvalid
+      render json: {error: "A singing with that name and date already exists."}
+    rescue Exception => e
+      puts e.message
+      puts e.backtrace.inspect
+    end  
 
     # render json: {singing: new_singing, calls: new_singing.calls}
   end
@@ -156,12 +165,12 @@ class SingingsController < OpenReadController
 
   private
      def singing_params
-      params.require(:singing).permit([
+      params.require(:singing).permit(
         :name,
         :location,
         :date,
         :csv,
         :book
-        ])
+        )
     end
 end
