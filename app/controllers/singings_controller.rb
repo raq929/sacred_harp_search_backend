@@ -7,17 +7,18 @@ def parse_minutes_shenandoah singing_id, csv
     # render json: singing_id
     calls = Array.new
     book_id = Book.find_by(name:"Shenandoah Harmony")[:id]
-    count = 0
-    CSV.parse(csv, {headers: true}).first do |call|
-      count += 1
-      # render json: call
-      # song_id = Song.find_or_create_by!(number: call["Page"], name: call["Song Title"], book_id: book_id)
-      # caller_id = Caller.find_or_create_by!(name: call["Name(s)"])[:id]
-      # new_call = Call.create!(song_id: song_id, caller_id: caller_id, singing_id: singing_id)
-      # calls.push(new_call)
+
+    CSV.parse(csv, {headers: true}) do |call|
+
+        song_id = Song.find_or_create_by!(number: call["Page"], name: call["Song Title"], book_id: book_id)[:id]
+        caller_id = Caller.find_or_create_by!(name: call["Name(s)"])[:id]
+
+        new_call = Call.create!(song_id: song_id, caller_id: caller_id, singing_id: singing_id)
+        calls.push(new_call)
+    
+        
     end
-    # render json: calls
-    render json: count;
+    render json: {calls: calls}
 end
 
 def parse_minutes_denson singing_id, params
@@ -113,6 +114,7 @@ class SingingsController < OpenReadController
 
   def create
     new_singing = nil
+
     begin
       Singing.transaction do
 
@@ -124,7 +126,8 @@ class SingingsController < OpenReadController
           parse_minutes_denson(singing_id, singing_params)
         end
       end
-    rescue ActiveRecord::RecordInvalid
+    rescue ActiveRecord::RecordInvalid => e
+      p e
       render text: "A singing with that name and date already exists.", status: 400
     rescue Exception => e
       puts e.message
