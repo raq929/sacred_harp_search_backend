@@ -125,7 +125,7 @@ class SingingsController < OpenReadController
         end
       end
     rescue ActiveRecord::RecordInvalid
-      render json: {error: "A singing with that name and date already exists."}
+      render text: "A singing with that name and date already exists.", status: 400
     rescue Exception => e
       puts e.message
       puts e.backtrace.inspect
