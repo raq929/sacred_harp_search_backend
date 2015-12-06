@@ -22,6 +22,7 @@ def parse_minutes_shenandoah singing_id, csv
 end
 
 def parse_minutes_denson singing_id, csv
+
   book_id = Book.find_by(name:"1991 Sacred Harp")[:id]
   minutes = denson_parse_one(csv)
   # render json: minutes
@@ -35,6 +36,7 @@ def parse_minutes_denson singing_id, csv
 end
 
 def denson_parse_one text
+  
   # Definition of format for parsing people's names and songs:
   songnum     = %r{\d{2,3}[tb]?}                # 24 or 306 or 306t or 95b
   song_markup   = %r{(?:\[#{songnum}\]) |           # [306t]
@@ -51,12 +53,12 @@ def denson_parse_one text
   fieldnames    = nil
   recnum      = 0
   rec = nil
-  render json: CSV.parse(text, {headers: true, :col_sep => "\t"})
-  CSV.parse(text, {headers: true, :col_sep => "\t"}).each do |row|
-    render json: row
+  count = 0
+  CSV.parse(text, {headers: false, :col_sep => "\t"}).each do |row|
+    count +=1
     # Read the header row
     begin fieldnames = row; next end unless fieldnames
-
+  
     # Read regular rows, decoding embedded newlines, removing " "
     # around fields, and parsing values that appear to be floats or
     # integers.
@@ -68,8 +70,8 @@ def denson_parse_one text
     rec       = Hash[fieldnames.zip(row.map{|i|
                         i.gsub!(/\x0B/, "\n")         # Merge format newlines embedded as ASCII 11 (Control-K aka \x0B).
                         i.gsub!(/^\"?(.*)\"$/m, "\\1")    # Trim leading and trailing quotes.
-                        i = ( i.valid_int?   ? Integer(i) : # Convert to int or float if possible.
-                           (i.valid_float? ?   Float(i) : i))
+                        i = ( (i.is_a? Integer )  ? Integer(i) : # Convert to int or float if possible.
+                           ((i.is_a? Float) ?   Float(i) : i))
                         })]
 
     ## DEBUG: $stderr.puts "#{recnum += 1} / #{rec['Date']} / #{rec['Name']} / #{rec['Location']}"
@@ -80,19 +82,19 @@ def denson_parse_one text
 
     minutes     = rec["Minutes"]
 
-    singers_raw   = minutes.scan(singer_match)
+    # singers_raw   = minutes.scan(singer_match)
 
-    rec['Singers']  = singers_raw.map{|pair|
-      name, songs   = pair
-      songlist    = songs.scan(song_markup).flatten
-      info      = {
-      'name'    => name,
-      # 'songs_raw' => songs,
-      'songs'   => songlist,
-      }
-    }
+    # rec['Singers']  = singers_raw.map{|pair|
+    #   name, songs   = pair
+    #   songlist    = songs.scan(song_markup).flatten
+    #   info      = {
+    #   'name'    => name,
+    #   # 'songs_raw' => songs,
+    #   'songs'   => songlist,
+    #   }
+    # }
   end
-
+  p "Count = ", count
 end
 
 class SingingsController < OpenReadController
