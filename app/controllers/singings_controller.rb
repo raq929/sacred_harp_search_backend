@@ -126,9 +126,9 @@ class SingingsController < OpenReadController
           parse_minutes_denson(singing_id, singing_params[:csv])
         end
       end
-    rescue ActiveRecord::RecordInvalid => e
-      p e
-      render text: "A singing with that name and date already exists.", status: 400
+    rescue ActiveRecord::RecordInvalid => invalid
+      p invalid.message
+      render text: invalid.message, status: 400
     rescue Exception => e
       puts e.message
       puts e.backtrace.inspect
