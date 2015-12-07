@@ -20,7 +20,7 @@ User.create!(email: "r@r.com", password: "123", admin: true)
 
 song_data = open("https://s3.amazonaws.com/sacredharpsearch/SongData_Denson_1991.txt")
 
-all_minutes = open("https://s3.amazonaws.com/sacredharpsearch/Minutes_All.json")
+all_minutes = open("https://s3.amazonaws.com/sacredharpsearch/some_minutes.json")
 
 CSV.foreach song_data, {headers: true, encoding: "MacRoman:UTF-8"} do |row|
    Song.create!(number: row["PageNum"], book_id: harp[:id], name: row["Title"], meter_name: row["MeterName"], meter_count: row["MeterCount"], song_text: row["SongText"], composer_first_name: row["Comp1First"], composer_last_name: row["Comp1Last"], composition_date: row["Comp1Date"])
