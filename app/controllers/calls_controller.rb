@@ -5,7 +5,7 @@ class CallsController < OpenReadController
      singing = Singing.find(call.singing_id)
      song = Song.find(call.song_id)
 
-     {song: {number: song.number, name: song.name, book: song.book}, singing: {name: singing.name, location: singing.location, date: singing.date, id: singing.id}, caller: caller.name}
+     {book: song.book, song: {number: song.number, name: song.name}, singing: {name: singing.name, location: singing.location, date: singing.date, id: singing.id}, caller: caller.name}
   end
 
   def index
@@ -24,7 +24,7 @@ class CallsController < OpenReadController
       end
     elsif params[:song_id]
       song_id = params[:song_id]
-      Call.where(song_id: song_id).find_each do |call|
+    Call.where(song_id: song_id).find_each do |call|
         result.push(callInfo(call))
       end
     else
@@ -46,7 +46,8 @@ class CallsController < OpenReadController
     params.require(:call).permit([
       :caller_id,
       :singing_id,
-      :song_id
+      :song_id,
+      :book
       ])
   end
 
