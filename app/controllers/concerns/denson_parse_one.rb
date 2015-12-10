@@ -1,4 +1,6 @@
 module DensonParseOne
+  extend ActiveSupport::Concern
+  
   def denson_parse_one text
     
     # Definition of format for parsing people's names and songs:
@@ -62,4 +64,5 @@ module DensonParseOne
     end
     rec
   end
+ 
 end  

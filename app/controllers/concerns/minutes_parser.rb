@@ -1,5 +1,9 @@
 
 module MinutesParser
+  extend ActiveSupport::Concern
+  include DensonParseOne
+  require 'csv'
+
   class CallList
     attr_accessor :calls
 
@@ -20,7 +24,7 @@ module MinutesParser
   end
 
 
-  require 'csv'
+  
   def parse_minutes_shenandoah singing_id, csv
       # render json: singing_id
       calls = Array.new
@@ -88,6 +92,7 @@ module MinutesParser
     end
     calls_list.calls
   end
+  
 end
 
 

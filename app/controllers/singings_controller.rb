@@ -1,11 +1,7 @@
-# require_relative '../../lib/minutes_parser.rb'
-# require_relative '../../lib/denson_parse_one.rb'
-
 require 'csv'
 
 class SingingsController < CallsController
-  include ::MinutesParser
-  include ::DensonParseOne
+  include MinutesParser
 
   def index
     if params[:name]
