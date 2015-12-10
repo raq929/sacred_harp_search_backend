@@ -39,6 +39,7 @@ class SingingsController < CallsController
     rescue Exception => e
       puts e.message
       puts e.backtrace.inspect
+      render text: e.message, status: 400
     else
       calls = new_singing.calls.map {|call| callInfo(call)}
       render json: calls

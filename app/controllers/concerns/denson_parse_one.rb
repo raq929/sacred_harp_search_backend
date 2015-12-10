@@ -62,6 +62,9 @@ module DensonParseOne
 
 
     end
+    if rec == nil
+      raise "Invalid CSV"
+    end
     rec
   end
  

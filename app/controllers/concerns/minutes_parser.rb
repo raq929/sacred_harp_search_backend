@@ -40,7 +40,9 @@ module MinutesParser
       
           
       end
-      calls
+      if calls == []
+        raise "Invalid CSV."
+      end
   end
 
   def parse_minutes_denson singing_id, csv
