@@ -22,12 +22,10 @@ module MinutesParser
       self.create_call song_id, caller_id, singing_id
     end
   end
-
-
   
   def parse_minutes_shenandoah singing_id, csv
-      # render json: singing_id
-      calls = Array.new
+    
+      calls_list = Array.new
       book_id = Book.find_by(name:"Shenandoah Harmony")[:id]
 
       CSV.parse(csv, {headers: true}) do |call|
@@ -36,17 +34,18 @@ module MinutesParser
           caller_id = Caller.find_or_create_by!(name: call["Name(s)"])[:id]
 
           new_call = Call.create!(song_id: song_id, caller_id: caller_id, singing_id: singing_id)
-          calls.push(new_call)
+          calls_list.push(new_call)
       
           
       end
-      if calls == []
+      if calls_list == []
         raise "Invalid CSV."
       end
+      calls_list
   end
 
   def parse_minutes_denson singing_id, csv
-    puts "singing id = ", singing_id
+    
     book_id = Book.find_by(name:"1991 Sacred Harp")[:id]
     minutes = denson_parse_one(csv)
     calls_list = CallList.new
@@ -92,7 +91,7 @@ module MinutesParser
         end
       end
     end
-    calls_list.calls
+    calls_list
   end
   
 end
